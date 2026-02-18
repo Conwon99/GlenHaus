@@ -6,6 +6,39 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Domain configuration
+# Note: You still need to add the domain in Netlify dashboard and configure DNS
+[[redirects]]
+  from = "https://www.glenhausgardenroom.com/*"
+  to = "https://glenhausgardenroom.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.glenhausgardenroom.com/*"
+  to = "https://glenhausgardenroom.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://glenhausgardenroom.com/*"
+  to = "https://glenhausgardenroom.com/:splat"
+  status = 301
+  force = true
+
+# Consolidate duplicate garden-rooms URLs (SEO: one canonical service page)
+[[redirects]]
+  from = "https://glenhausgardenroom.com/service/garden-rooms"
+  to = "https://glenhausgardenroom.com/garden-rooms"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://glenhausgardenroom.com/service/garden-rooms/"
+  to = "https://glenhausgardenroom.com/garden-rooms"
+  status = 301
+  force = true
+
 # Security headers
 [[headers]]
   for = "/*"

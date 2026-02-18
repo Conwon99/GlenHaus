@@ -1,4 +1,5 @@
 import { PhoneLink } from "@/components/PhoneLink";
+import { trackQuoteButton } from "@/utils/analytics";
 
 export const GardenRoomsPricing = () => {
   const stripeLink = "https://buy.stripe.com/bJe14nf3hgmpgLM6Kv9EI0f";
@@ -24,19 +25,13 @@ export const GardenRoomsPricing = () => {
             <p className="text-gray-600 box-border caret-transparent mb-6 leading-relaxed">
               Contact us today for a free, no-obligation quote. We'll visit your property, discuss your requirements, and provide a detailed estimate for your garden room project.
             </p>
-            <div className="box-border caret-transparent flex flex-col gap-4">
+            <div className="box-border caret-transparent">
               <PhoneLink
                 variant="default"
                 iconSrc="https://c.animaapp.com/mhooxuovKXaEfR/assets/670f86de88858acaf330ddd9_phone.svg"
                 trackingLocation="garden-rooms-pricing"
-                className="bg-green-800 hover:bg-green-900 text-white font-semibold py-4 px-8 rounded-lg text-lg box-border caret-transparent transition-colors duration-300 flex items-center justify-center gap-2"
+                className="bg-green-800 hover:bg-green-900 text-white font-semibold py-4 px-8 rounded-lg text-lg box-border caret-transparent transition-colors duration-300 flex items-center justify-center gap-2 w-full"
               />
-              <a
-                href="mailto:info@glenhausgardenrooms.com"
-                className="bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-4 px-8 rounded-lg text-lg box-border caret-transparent transition-colors duration-300 text-center"
-              >
-                Email Us
-              </a>
             </div>
           </div>
 
@@ -51,6 +46,7 @@ export const GardenRoomsPricing = () => {
               href={stripeLink}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackQuoteButton('pricing')}
               className="block bg-green-800 hover:bg-green-900 text-white font-semibold py-4 px-8 rounded-lg text-lg box-border caret-transparent transition-colors duration-300 text-center shadow-lg hover:shadow-xl"
             >
               Book & Pay Deposit

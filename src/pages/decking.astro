@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Header } from "@/sections/Header";
+import { Footer } from "@/sections/Footer";
+import { DeckingHero } from "@/pages/decking/sections/Hero";
+import { DeckingFeatures } from "@/pages/decking/sections/Features";
+import { DeckingGallery } from "@/pages/decking/sections/Gallery";
+import { DeckingTestimonials } from "@/pages/decking/sections/Testimonials";
+import { DeckingFAQ } from "@/pages/decking/sections/FAQ";
+import { DeckingContactForm } from "@/pages/decking/sections/ContactForm";
+---
+
+<BaseLayout 
+  title="Deck Installation Scotland | Professional Decking Services | Glenhaus Garden Rooms"
+  description="Transform your outdoor space with beautiful, professional decking. Expert deck installation across Scotland. Free quotes, fully insured, years of experience."
+  canonical="https://glenhausgardenroom.com/decking"
+  keywords="decking scotland, deck installation, composite decking scotland, timber decking, deck builders scotland, outdoor decking"
+  gaId="G-T9RTPLDCJ7"
+>
+    <div class="text-neutral-600 text-lg not-italic normal-nums font-medium accent-auto bg-[#323232] box-border caret-transparent block tracking-[normal] leading-[27px] list-outside list-disc min-h-full pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-manrope">
+      <Header client:load />
+      <div class="pt-[80px] md:pt-[100px]">
+        <DeckingHero client:load />
+      </div>
+      <DeckingFeatures client:load />
+      <DeckingGallery client:load />
+      <DeckingTestimonials client:load />
+      <DeckingFAQ client:load />
+      <DeckingContactForm client:load />
+      <Footer client:load />
+    </div>
+</BaseLayout>

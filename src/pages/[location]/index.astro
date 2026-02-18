@@ -1,0 +1,88 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Header } from "@/sections/Header";
+import { Footer } from "@/sections/Footer";
+import { LocationHero } from "@/components/location/LocationHero";
+import { LocationServiceIntro } from "@/components/location/LocationServiceIntro";
+import { LocationServicesSection } from "@/components/location/LocationServicesSection";
+import { LocationContentSection } from "@/components/location/LocationContentSection";
+import { GardenRoomsTestimonials } from "@/pages/garden-rooms/sections/Testimonials";
+import { GardenRoomsContactForm } from "@/pages/garden-rooms/sections/ContactForm";
+import { getAllLocations } from "@/data/locations";
+import type { Location } from "@/data/locations";
+
+const siteUrl = "https://glenhausgardenroom.com";
+
+export function getStaticPaths() {
+  return getAllLocations().map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+const { location } = Astro.props as { location: Location };
+
+const title = `Garden Rooms & Decking ${location.name} | ${location.regionLabel} | Glenhaus Garden Rooms`;
+const description = `Professional garden room and decking installation in ${location.name}. ${location.neighborhoods.slice(0, 3).join(", ")} and surrounding areas. Free quotes, fully insured.`;
+const canonical = `${siteUrl}/${location.slug}`;
+const keywords = `garden rooms ${location.name}, decking ${location.name}, garden room installation ${location.regionLabel}, deck installation ${location.name}`;
+
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Locations", url: "/locations" },
+  { name: location.name, url: `/${location.slug}` },
+];
+
+const locationSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": `Glenhaus Garden Rooms - ${location.name}`,
+  "description": `Professional garden room and decking installation in ${location.name} and ${location.regionLabel}.`,
+  "url": canonical,
+  "telephone": "+447375872331",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": location.name,
+    "addressRegion": location.regionLabel,
+    "addressCountry": "GB",
+  },
+  ...(location.geo && {
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: location.geo.latitude,
+      longitude: location.geo.longitude,
+    },
+  }),
+  "areaServed": { "@type": "City", "name": location.name },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "24",
+    "bestRating": "5",
+    "worstRating": "1",
+  },
+  "priceRange": "$$",
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  keywords={keywords}
+  breadcrumbs={breadcrumbs}
+  locationSchema={locationSchema}
+>
+  <div class="text-neutral-600 text-lg font-medium bg-[#323232] box-border min-h-full pointer-events-auto text-start font-manrope">
+    <Header client:load />
+    <div class="pt-[80px] md:pt-[100px]">
+      <LocationHero location={location} client:load />
+      <LocationServiceIntro location={location} client:load />
+      <LocationServicesSection location={location} client:load />
+      <LocationContentSection location={location} client:load />
+      <GardenRoomsTestimonials client:load />
+      <GardenRoomsContactForm client:load />
+      <Footer client:load location={{ name: location.name, regionLabel: location.regionLabel, geo: location.geo }} />
+    </div>
+  </div>
+</BaseLayout>

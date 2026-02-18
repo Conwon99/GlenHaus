@@ -1,4 +1,3 @@
-import { ServicesDropdown } from "@/sections/Navbar/components/ServicesDropdown";
 import { PhoneLink } from "@/components/PhoneLink";
 import { trackQuoteButton } from "@/utils/analytics";
 
@@ -79,10 +78,9 @@ export const DesktopNav = ({ isMobileMenuOpen = false, onCloseMobileMenu }: Desk
             About
           </a>
         </li>
-        <ServicesDropdown onCloseMobileMenu={onCloseMobileMenu} />
         <li className="box-border caret-transparent min-h-0 min-w-0 bg-[position:0px_0px] mx-0 w-full md:min-h-[auto] md:min-w-[auto] md:mx-1 lg:mx-1.5 md:w-auto md:flex md:items-center">
           <a
-            href="/projects"
+            href="/garden-rooms"
             onClick={() => {
               if (onCloseMobileMenu) {
                 onCloseMobileMenu();
@@ -90,7 +88,20 @@ export const DesktopNav = ({ isMobileMenuOpen = false, onCloseMobileMenu }: Desk
             }}
             className="text-white box-border caret-transparent flex justify-center items-center w-full text-center py-3 md:text-white hover:text-green-500 hover:border-green-500 text-lg md:text-sm lg:text-[15px] leading-6 md:leading-5 lg:leading-6"
           >
-            Projects
+            Garden Rooms
+          </a>
+        </li>
+        <li className="box-border caret-transparent min-h-0 min-w-0 bg-[position:0px_0px] mx-0 w-full md:min-h-[auto] md:min-w-[auto] md:mx-1 lg:mx-1.5 md:w-auto md:flex md:items-center">
+          <a
+            href="/decking"
+            onClick={() => {
+              if (onCloseMobileMenu) {
+                onCloseMobileMenu();
+              }
+            }}
+            className="text-white box-border caret-transparent flex justify-center items-center w-full text-center py-3 md:text-white hover:text-green-500 hover:border-green-500 text-lg md:text-sm lg:text-[15px] leading-6 md:leading-5 lg:leading-6"
+          >
+            Decking
           </a>
         </li>
         <li className="box-border caret-transparent min-h-0 min-w-0 bg-[position:0px_0px] mx-0 w-full md:min-h-[auto] md:min-w-[auto] md:mx-1 lg:mx-1.5 md:w-auto md:flex md:items-center">
@@ -117,11 +128,24 @@ export const DesktopNav = ({ isMobileMenuOpen = false, onCloseMobileMenu }: Desk
             displayClassName="text-white text-2xl font-semibold box-border caret-transparent"
           />
           <a
-            href="/contact"
-            onClick={() => {
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
               trackQuoteButton('mobile-menu');
               if (onCloseMobileMenu) {
                 onCloseMobileMenu();
+              }
+              const contactSection = document.getElementById('contact');
+              if (contactSection) {
+                const offset = 100;
+                const elementPosition = contactSection.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+                window.scrollTo({
+                  top: offsetPosition,
+                  behavior: "smooth",
+                });
+              } else if (isHomePage) {
+                window.location.href = '/#contact';
               }
             }}
             className="text-white items-center bg-green-800 box-border caret-transparent gap-x-2 flex justify-center w-[calc(100%-10px)] mx-auto text-center border px-8 py-4 rounded-[100px] border-solid border-transparent hover:bg-green-900 hover:border-green-800 shadow-[0_0_20px_rgba(22,101,52,0.5),0_0_40px_rgba(22,101,52,0.3)] hover:shadow-[0_0_30px_rgba(20,83,45,0.7),0_0_60px_rgba(20,83,45,0.5)] transition-shadow duration-300"

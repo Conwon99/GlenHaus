@@ -1,6 +1,10 @@
 import { GardenRoomsContactForm as ContactFormComponent } from "@/pages/garden-rooms/sections/ContactForm/components/GardenRoomsContactForm";
 
-export const GardenRoomsContactForm = () => {
+interface GardenRoomsContactFormProps {
+  location?: { name: string; regionLabel?: string };
+}
+
+export const GardenRoomsContactForm = ({ location }: GardenRoomsContactFormProps) => {
   return (
     <section id="contact" className="relative bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 box-border caret-transparent py-16 md:py-24">
       <div className="absolute inset-0 bg-gradient-to-r from-gray-900/60 via-gray-900/40 to-transparent"></div>
@@ -10,7 +14,9 @@ export const GardenRoomsContactForm = () => {
             Get Your Free Quote Today
           </h2>
           <p className="text-lg md:text-xl text-white/90 box-border caret-transparent max-w-3xl mx-auto">
-            Fill out the form below and we'll get back to you as soon as possible to discuss your garden room project.
+            {location
+              ? `Fill out the form below and we'll get back to you as soon as possible to discuss your garden room project in ${location.name}. Serving ${location.name}, ${location.regionLabel || "Scotland"} and surrounding areas. Free quotes available.`
+              : "Fill out the form below and we'll get back to you as soon as possible to discuss your garden room project. Serving all of Scotland. Free quotes available for all garden room installations."}
           </p>
         </div>
         

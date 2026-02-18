@@ -1,0 +1,23 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Header } from "@/sections/Header";
+import { Footer } from "@/sections/Footer";
+import { Hero } from "@/sections/Hero";
+import { ServiceDetail } from "@/sections/ServiceDetail";
+---
+
+<BaseLayout 
+  title="Garden Room Installation Ayrshire | Custom Garden Rooms | Glenhaus Garden Rooms"
+  description="Professional garden room installation services in Ayrshire and Scotland. Create additional living space with our high-quality garden rooms. Free quotes available."
+  canonical="https://glenhausgardenroom.com/service/garden-rooms"
+  keywords="garden room installation ayrshire, garden rooms scotland, custom garden rooms, garden office installation"
+>
+  <div class="text-neutral-600 text-lg not-italic normal-nums font-medium accent-auto bg-[#323232] box-border caret-transparent block tracking-[normal] leading-[27px] list-outside list-disc min-h-full pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-manrope">
+    <Header client:load />
+    <div class="pt-[80px] md:pt-[100px]">
+      <Hero client:load />
+    </div>
+    <ServiceDetail client:load />
+    <Footer client:load />
+  </div>
+</BaseLayout>

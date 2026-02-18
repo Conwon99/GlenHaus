@@ -18,12 +18,7 @@ export const ServicesDropdown = ({ onCloseMobileMenu }: ServicesDropdownProps = 
   }, []);
 
   const services = [
-    { name: "Fencing", href: "/service/fencing" },
-    { name: "Fence Repairs", href: "/service/fence-repairs" },
-    { name: "Decking", href: "/service/decking" },
-    { name: "Gates", href: "/service/gates" },
-    { name: "Sheds", href: "/service/sheds" },
-    { name: "Garden Rooms", href: "/service/garden-rooms" },
+    { name: "Decking", href: "/decking" },
   ];
 
   const handleLinkClick = () => {

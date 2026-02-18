@@ -15,12 +15,6 @@ export const FooterLinks = () => {
           About
         </a>
         <a
-          href="/services"
-          className="text-white box-border caret-transparent block hover:text-orange-500 hover:decoration-transparent hover:border-orange-500"
-        >
-          Services
-        </a>
-        <a
           href="/projects"
           className="text-white box-border caret-transparent block hover:text-orange-500 hover:decoration-transparent hover:border-orange-500"
         >
@@ -35,10 +29,16 @@ export const FooterLinks = () => {
           Contact
         </a>
         <a
-          href="/privacy-policy"
+          href="/locations"
           className="text-white box-border caret-transparent block hover:text-orange-500 hover:decoration-transparent hover:border-orange-500"
         >
-          Privacy Policy
+          Locations
+        </a>
+        <a
+          href="/garden-rooms"
+          className="text-white box-border caret-transparent block hover:text-orange-500 hover:decoration-transparent hover:border-orange-500"
+        >
+          Garden Rooms
         </a>
       </div>
     </div>

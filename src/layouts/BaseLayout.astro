@@ -1,5 +1,11 @@
 ---
 import '../styles/global.css';
+import { getAllLocations } from '@/data/locations';
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
 
 interface Props {
   title: string;
@@ -7,22 +13,39 @@ interface Props {
   canonical?: string;
   keywords?: string;
   ogImage?: string;
+  gaId?: string;
+  breadcrumbs?: BreadcrumbItem[];
+  locationSchema?: Record<string, unknown>;
 }
 
-const { title, description, canonical, keywords, ogImage } = Astro.props;
+const { title, description, canonical, keywords, ogImage, gaId = "G-T9RTPLDCJ7", breadcrumbs, locationSchema } = Astro.props;
+
+const allLocationNames = getAllLocations().map((loc) => ({ "@type": "City" as const, "name": loc.name }));
+const defaultBreadcrumbs: BreadcrumbItem[] = [{ name: "Home", url: "https://glenhausgardenroom.com/" }];
+const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbItems.map((item, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": item.name,
+    "item": item.url.startsWith("http") ? item.url : `https://glenhausgardenroom.com${item.url}`,
+  })),
+};
 
 // Canonical phone number for SEO and structured data
-const CANONICAL_PHONE = "07368 665616";
-const CANONICAL_PHONE_TEL = "+447368665616";
+const CANONICAL_PHONE = "07375 872331";
+const CANONICAL_PHONE_TEL = "+447375872331";
 
 // Default meta description (optimized to 120-160 characters)
-const defaultDescription = "Professional fencing and decking services in Ayrshire. Expert installation, quality materials, free quotes. Fully insured contractors with 13+ years experience.";
+const defaultDescription = "Professional garden room and decking installation across Scotland. Custom garden rooms, garden offices, and beautiful decking solutions. Free quotes, fully insured, 13+ years experience.";
 
 // Default keywords
-const defaultKeywords = "fence contractor ayrshire, fencing ayrshire, decking ayrshire, fence installation ayrshire, fence repairs ayrshire, gates ayrshire, sheds ayrshire, garden rooms ayrshire, wooden fencing ayrshire, composite fencing ayrshire, chainlink fencing ayrshire, timber decking ayrshire, composite decking ayrshire, fencing glasgow, decking glasgow";
+const defaultKeywords = "garden rooms scotland, decking scotland, garden room installation, deck installation, custom garden rooms, composite decking, garden office scotland, deck builders scotland, garden room builders, outdoor decking";
 
 // Generate canonical URL
-const siteUrl = "https://www.glenhausgardenrooms.com";
+const siteUrl = "https://glenhausgardenroom.com";
 const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString();
 const defaultOgImage = ogImage || `${siteUrl}/og-image.jpg`;
 ---
@@ -36,13 +59,23 @@ const defaultOgImage = ogImage || `${siteUrl}/og-image.jpg`;
     <meta name="description" content={description || defaultDescription} />
     <meta name="keywords" content={keywords || defaultKeywords} />
     <meta name="author" content="Glenhaus Garden Rooms" />
-    <meta name="language" content="English" />
-    <meta name="geo.region" content="GB-AYS" />
-    <meta name="geo.placename" content="Ayrshire, Scotland" />
+    <meta name="language" content="en-GB" />
+    <meta name="geo.region" content="GB-SCT" />
+    <meta name="geo.placename" content="Scotland" />
+    <meta name="geo.position" content="55.6194;-4.6551" />
+    <meta name="ICBM" content="55.6194, -4.6551" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalUrl} />
+    
+    <!-- DNS Prefetch and Preconnect for performance -->
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     
     <!-- Hreflang for UK targeting -->
     <link rel="alternate" hreflang="en-gb" href={canonicalUrl} />
@@ -55,44 +88,50 @@ const defaultOgImage = ogImage || `${siteUrl}/og-image.jpg`;
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={defaultOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Glenhaus Garden Rooms - Professional garden room and decking installation across Scotland" />
     <meta property="og:site_name" content="Glenhaus Garden Rooms" />
+    <meta property="og:locale" content="en_GB" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description || defaultDescription} />
     <meta name="twitter:image" content={defaultOgImage} />
+    <meta name="twitter:image:alt" content="Glenhaus Garden Rooms - Professional garden room and decking installation across Scotland" />
     
     <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.jpg" />
     <link rel="shortcut icon" href="/favicon.jpg" />
     <meta name="generator" content={Astro.generator} />
     
-    <!-- Google Fonts - Playfair Display -->
+    <!-- Google Fonts - Playfair Display (async to avoid render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" /></noscript>
     
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VV87ESBXDF"></script>
-    <script is:inline>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script is:inline define:vars={{ gaId }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-VV87ESBXDF');
+      gtag('config', gaId);
     </script>
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": ["HomeAndConstructionBusiness", "ProfessionalService", "LocalBusiness"],
       "name": "Glenhaus Garden Rooms",
-      "description": "Fully qualified and insured fencing and decking specialists. Fencing, Fence Repairs, Decking, Gates, Sheds, Garden Rooms across Ayrshire. Over 13 years' experience.",
+      "alternateName": ["GlenHaus Garden Rooms", "GlenHaus"],
+      "description": "Professional garden room and deck installation specialists across Scotland. Custom garden rooms, garden offices, and beautiful decking solutions. Fully qualified, insured, with over 13 years' experience.",
       "telephone": CANONICAL_PHONE_TEL,
-      "email": "info@glenhausgardenrooms.com",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "",
-        "addressLocality": "Irvine",
-        "addressRegion": "North Ayrshire",
+        "addressLocality": "Ayrshire",
+        "addressRegion": "Scotland Central Belt",
         "postalCode": "",
         "addressCountry": "GB"
       },
@@ -101,380 +140,137 @@ const defaultOgImage = ogImage || `${siteUrl}/og-image.jpg`;
         "latitude": "55.6194",
         "longitude": "-4.6551"
       },
-      "areaServed": [
-        {
-          "@type": "City",
-          "name": "Ayrshire"
-        },
-        {
-          "@type": "City",
-          "name": "Irvine"
-        },
-        {
-          "@type": "City",
-          "name": "Kilmarnock"
-        },
-        {
-          "@type": "City",
-          "name": "Ayr"
-        },
-        {
-          "@type": "City",
-          "name": "Troon"
-        },
-        {
-          "@type": "City",
-          "name": "Prestwick"
-        },
-        {
-          "@type": "City",
-          "name": "Kilwinning"
-        },
-        {
-          "@type": "City",
-          "name": "Glasgow"
-        }
-      ],
+      "areaServed": allLocationNames,
       "serviceType": [
-        // Main Services
-        "Fencing",
-        "Fence repairs",
-        "Decking",
-        "Gates",
-        "Sheds",
-        "Garden rooms",
-        // Fence Contractor Services
-        "Custom fence construction",
-        "Wood fence installation",
-        "Wooden fencing",
-        "Fence replacement",
-        "Garden fence installation",
-        "Composite fencing installation",
-        "Composite fencing",
-        "Chainlink fencing installation",
-        "Chainlink fencing",
-        "Nylofor fencing",
-        "Concrete fencing",
-        "Fence design",
-        "Privacy fence installation",
-        "Security fencing and metal cage installation",
-        // Decking Services
-        "Timber decking",
+        "Garden room installation",
+        "Custom garden rooms",
+        "Garden office installation",
+        "Outdoor room construction",
+        "Garden room design",
+        "Garden room planning",
+        "Garden room insulation",
+        "Garden room electrical installation",
+        "Garden room heating installation",
+        "Bespoke garden rooms",
+        "Garden room builders",
+        "Garden room contractors",
+        "Deck installation",
+        "Decking installation",
         "Composite decking",
-        "Wooden decking",
-        "Deck construction",
-        "Patio construction",
-        "Deck repair",
-        "Deck replacement",
-        "Deck design",
-        "Patio decks",
-        // Shed Services
-        "Cabin design and building",
-        "Custom shed design",
-        "Storage shed design and building",
-        // Landscape Services
-        "Landscape installations",
-        "Outdoor step construction",
-        "Patio design",
-        // Maintenance
-        "Repairs and maintenance"
+        "Timber decking",
+        "PVC decking",
+        "Deck builders",
+        "Deck contractors",
+        "Outdoor decking",
+        "Garden decking",
+        "Multi-level decking"
       ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Fencing, Decking, and Construction Services",
+        "name": "Garden Room and Deck Installation Services",
         "itemListElement": [
-          // Main Services
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Fencing",
-              "description": "Professional fencing installation services across Ayrshire and Glasgow"
+              "name": "Garden Room Installation",
+              "description": "Professional garden room installation across Scotland. Custom-designed garden rooms for home offices, gyms, relaxation spaces, and additional living space."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Fence repairs",
-              "description": "Expert fence repair and restoration services for all fence types"
+              "name": "Deck Installation",
+              "description": "Professional deck installation across Scotland. Custom decking solutions using timber, composite, or PVC materials. Multi-level decks, railings, and steps available."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Decking",
-              "description": "Professional decking installation using timber and composite materials"
+              "name": "Composite Decking Installation",
+              "description": "Professional composite decking installation across Scotland. Low-maintenance, durable composite decking solutions perfect for Scottish weather."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Gates",
-              "description": "Garden and security gate installation and design"
+              "name": "Timber Decking Installation",
+              "description": "Professional timber decking installation across Scotland. High-quality timber decking solutions for beautiful outdoor living spaces."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Sheds",
-              "description": "Custom shed design and installation services"
+              "name": "Deck Repair and Maintenance",
+              "description": "Professional deck repair and maintenance services across Scotland. Keep your decking in perfect condition with our expert maintenance services."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Garden rooms",
-              "description": "Professional garden room installation for additional living space"
-            }
-          },
-          // Fencing Services
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Custom fence construction",
-              "description": "Bespoke custom fence construction tailored to your specific needs"
+              "name": "Custom Deck Design",
+              "description": "Expert custom deck design services across Scotland. We create bespoke deck designs tailored to your outdoor space and requirements."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Wood fence installation",
-              "description": "Professional wood fence installation using quality timber"
+              "name": "Custom Garden Rooms",
+              "description": "Bespoke custom garden rooms tailored to your specific needs and garden space. From design to completion, we create the perfect solution."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Wooden fencing",
-              "description": "High-quality wooden fencing installation with natural timber"
+              "name": "Garden Office Installation",
+              "description": "Professional garden office installation for remote working. Fully insulated, weatherproof garden offices with electrical and heating options."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Fence replacement",
-              "description": "Complete fence replacement services with removal and installation"
+              "name": "Garden Room Design",
+              "description": "Expert garden room design services. We work with you to create the perfect garden room design that matches your requirements and garden space."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Garden fence installation",
-              "description": "Garden fence installation for privacy and security"
+              "name": "Garden Room Planning Permission",
+              "description": "Expert advice on garden room planning permission requirements in Scotland. We guide you through the planning process."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Composite fencing installation",
-              "description": "Low-maintenance composite fencing installation"
+              "name": "Garden Room Insulation",
+              "description": "Professional garden room insulation installation. Fully insulated garden rooms suitable for year-round use in Scottish weather."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Composite fencing",
-              "description": "Durable composite fencing combining wood appearance with weather resistance"
+              "name": "Garden Room Electrical Installation",
+              "description": "Professional electrical installation for garden rooms. Safe, certified electrical work for lighting, heating, and power outlets."
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Chainlink fencing installation",
-              "description": "Cost-effective chainlink fence installation for security and boundaries"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Chainlink fencing",
-              "description": "Practical chainlink fencing with excellent visibility and security"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Nylofor fencing",
-              "description": "Modern nylofor fencing with excellent privacy and weather resistance"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Concrete fencing",
-              "description": "Durable concrete fencing for maximum security and longevity"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Fence design",
-              "description": "Professional fence design services to create the perfect solution"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Privacy fence installation",
-              "description": "Privacy fence installation for seclusion and security"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Security fencing and metal cage installation",
-              "description": "High-security fencing and metal cage installation for maximum protection"
-            }
-          },
-          // Decking Services
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Timber decking",
-              "description": "High-quality timber decking installation with natural wood beauty"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Composite decking",
-              "description": "Low-maintenance composite decking that maintains appearance for years"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Wooden decking",
-              "description": "Premium wooden decking with natural beauty and warmth"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Deck construction",
-              "description": "Professional deck construction services from design to completion"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Patio construction",
-              "description": "Expert patio construction and installation services"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Deck repair",
-              "description": "Expert deck repair services for damaged or worn decking"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Deck replacement",
-              "description": "Complete deck replacement services with removal and new installation"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Deck design",
-              "description": "Custom deck design services tailored to your space and needs"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Patio decks",
-              "description": "Patio deck installation that integrates with your patio area"
-            }
-          },
-          // Shed Services
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Cabin design and building",
-              "description": "Custom cabin design and building services for various uses"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Custom shed design",
-              "description": "Bespoke custom shed design services tailored to your requirements"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Storage shed design and building",
-              "description": "Custom storage shed design and building for practical storage solutions"
-            }
-          },
-          // Landscape Services
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Landscape installations",
-              "description": "Professional landscape installation services including paths and hardscaping"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Outdoor step construction",
-              "description": "Expert outdoor step construction and installation for safe access"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Patio design",
-              "description": "Professional patio design services for outdoor living spaces"
-            }
-          },
-          // Maintenance
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Repairs and maintenance",
-              "description": "Comprehensive repairs and maintenance services for outdoor structures"
+              "name": "Garden Room Heating Installation",
+              "description": "Garden room heating solutions for year-round comfort. Electric heating, underfloor heating, and other heating options available."
             }
           }
         ]
@@ -522,6 +318,58 @@ const defaultOgImage = ogImage || `${siteUrl}/og-image.jpg`;
         "value": "5-10"
       }
     })} />
+    <!-- Organization Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Glenhaus Garden Rooms",
+      "alternateName": ["GlenHaus Garden Rooms", "GlenHaus"],
+      "url": siteUrl,
+      "logo": `${siteUrl}/logo.png`,
+      "description": "Professional garden room and decking installation specialists across Scotland. Custom garden rooms, garden offices, and beautiful decking solutions. Fully qualified, insured, with over 13 years' experience.",
+      "telephone": CANONICAL_PHONE_TEL,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ayrshire",
+        "addressRegion": "Scotland Central Belt",
+        "addressCountry": "GB"
+      },
+      "areaServed": allLocationNames,
+      "sameAs": [],
+      "foundingDate": "2011",
+      "numberOfEmployees": {
+        "@type": "QuantitativeValue",
+        "value": "5-10"
+      }
+    })} />
+    
+    <!-- WebSite Schema with SearchAction -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Glenhaus Garden Rooms",
+      "alternateName": ["GlenHaus Garden Rooms", "GlenHaus"],
+      "url": siteUrl,
+      "description": "Professional garden room and decking installation across Scotland",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Glenhaus Garden Rooms"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${siteUrl}/?s={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
+    })} />
+    
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    {locationSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(locationSchema)} />
+    )}
   </head>
   <body>
     <slot />

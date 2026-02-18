@@ -23,6 +23,8 @@ export const trackEvent = (eventName: string, eventParams?: Record<string, any>)
 
 /**
  * Track quote button clicks
+ * Format: quoteButton_{location}
+ * Examples: quoteButton_hero, quoteButton_nav
  */
 export const trackQuoteButton = (location: string) => {
   trackEvent(`quoteButton_${location}`);
@@ -30,6 +32,8 @@ export const trackQuoteButton = (location: string) => {
 
 /**
  * Track phone link clicks
+ * Format: phone_{location}
+ * Examples: phone_hero, phone_nav, phone_services
  */
 export const trackPhone = (location: string) => {
   trackEvent(`phone_${location}`);
@@ -37,8 +41,24 @@ export const trackPhone = (location: string) => {
 
 /**
  * Track form start (when user first interacts with form)
+ * Format: formstart_{location}
+ * Examples: formstart_contact, formstart_service
  */
-export const trackFormStart = (location: string) => {
-  trackEvent(`formstart_${location}`);
+export const trackFormStart = (location: string = 'contact') => {
+  trackEvent(`formstart_${location}`, {
+    event_category: 'Form',
+    event_label: location,
+  });
+};
+
+/**
+ * Track form submit
+ * Event name: form_submit
+ */
+export const trackFormSubmit = (location?: string) => {
+  trackEvent('form_submit', {
+    event_category: 'Form',
+    event_label: location || 'contact',
+  });
 };
 

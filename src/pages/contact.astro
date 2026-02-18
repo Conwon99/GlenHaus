@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Header } from "@/sections/Header";
+import { Footer } from "@/sections/Footer";
+import { ContactHero } from "@/pages/contact/sections/ContactHero";
+import { ContactInfo } from "@/pages/contact/sections/ContactInfo";
+import { ContactForm } from "@/pages/contact/sections/ContactForm";
+---
+
+<BaseLayout 
+  title="Contact Us | Get Your Free Quote | Glenhaus Garden Rooms"
+  description="Contact Glenhaus Garden Rooms for your free quote. Professional garden room and decking installation across Scotland. Call us or fill out our contact form today."
+  canonical="https://glenhausgardenroom.com/contact"
+  keywords="contact glenhaus garden rooms, free quote, garden room contractors contact, decking installers scotland, garden room installers scotland"
+>
+  <div class="text-neutral-600 text-lg not-italic normal-nums font-medium accent-auto bg-[#323232] box-border caret-transparent block tracking-[normal] leading-[27px] list-outside list-disc min-h-full pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-manrope">
+    <Header client:load />
+    <div class="pt-[80px] md:pt-[100px]">
+      <ContactHero client:load />
+    </div>
+    <ContactForm client:load />
+    <Footer client:load />
+  </div>
+</BaseLayout>

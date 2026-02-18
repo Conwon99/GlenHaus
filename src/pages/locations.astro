@@ -1,0 +1,40 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Header } from "@/sections/Header";
+import { Footer } from "@/sections/Footer";
+import { LocationsHero } from "@/pages/locations/sections/LocationsHero";
+import { LocationsGrid } from "@/pages/locations/sections/LocationsGrid";
+import { centralBeltLocations, ayrshireLocations } from "@/data/locations";
+
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Locations", url: "/locations" },
+];
+---
+
+<BaseLayout
+  title="Areas We Serve | Garden Rooms & Decking Scotland | Glenhaus Garden Rooms"
+  description="Garden room and decking installation across Scotland Central Belt and Ayrshire. We serve Glasgow, Edinburgh, Stirling, Ayr, Irvine and more. Free quotes."
+  canonical="https://glenhausgardenroom.com/locations"
+  keywords="garden rooms scotland, decking scotland, garden room installation glasgow, decking edinburgh, garden rooms ayrshire, decking central belt"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="text-neutral-600 text-lg not-italic normal-nums font-medium accent-auto bg-[#323232] box-border caret-transparent block tracking-[normal] leading-[27px] list-outside list-disc min-h-full pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-manrope">
+    <Header client:load />
+    <div class="pt-[80px] md:pt-[100px]">
+      <LocationsHero client:load />
+      <LocationsGrid
+        client:load
+        regionTitle="Scotland Central Belt"
+        locations={centralBeltLocations}
+      />
+      <LocationsGrid
+        client:load
+        regionTitle="Ayrshire – High-Value Add-Ons"
+        regionSubtitle="Excellent for garden rooms and decking across Ayrshire."
+        locations={ayrshireLocations}
+      />
+    </div>
+    <Footer client:load />
+  </div>
+</BaseLayout>

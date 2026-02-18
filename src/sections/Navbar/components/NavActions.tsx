@@ -1,28 +1,38 @@
 import { PhoneLink } from "@/components/PhoneLink";
 import { trackQuoteButton } from "@/utils/analytics";
 
-interface NavActionsProps {
-  isMobileMenuOpen?: boolean;
-  onToggleMobileMenu?: () => void;
-}
-
-export const NavActions = ({ isMobileMenuOpen = false, onToggleMobileMenu }: NavActionsProps) => {
+export const NavActions = () => {
   return (
     <div className="items-center box-border caret-transparent flex basis-auto grow-0 shrink-0 justify-end justify-self-end md:basis-[0%] md:grow md:shrink md:mr-0 md:ml-auto">
-      <div className="items-center box-border caret-transparent gap-x-2 hidden min-h-0 min-w-0 md:flex md:min-h-[auto] md:min-w-[auto] md:gap-x-8 lg:gap-x-12 md:flex-nowrap md:whitespace-nowrap">
-        <PhoneLink
-          iconSrc="https://c.animaapp.com/mhooxuovKXaEfR/assets/670f86de88858acaf330ddd9_phone.svg"
-          iconAlt="Phone"
-          showIcon={true}
-          trackingLocation="nav"
-          className="text-white items-center box-border caret-transparent gap-x-1.5 flex justify-start max-w-full gap-y-1.5 whitespace-nowrap hover:text-green-500 hover:decoration-transparent hover:border-green-500 relative z-0"
-          displayClassName="box-border caret-transparent text-base font-medium md:text-lg md:font-semibold lg:text-xl lg:font-semibold text-white"
-        />
-        <div className="box-border caret-transparent min-h-0 min-w-0 md:min-h-[auto] md:min-w-[auto]">
+      <div className="items-center box-border caret-transparent gap-x-2 flex min-h-0 min-w-0 md:gap-x-8 lg:gap-x-12 md:flex-nowrap md:whitespace-nowrap">
+        <div className="hidden md:flex">
+          <PhoneLink
+            iconSrc="https://c.animaapp.com/mhooxuovKXaEfR/assets/670f86de88858acaf330ddd9_phone.svg"
+            iconAlt="Phone"
+            showIcon={true}
+            trackingLocation="nav"
+            className="text-white items-center box-border caret-transparent gap-x-1.5 flex justify-start max-w-full gap-y-1.5 whitespace-nowrap hover:text-green-500 hover:decoration-transparent hover:border-green-500 relative z-0"
+            displayClassName="box-border caret-transparent text-sm font-medium md:text-lg md:font-semibold lg:text-xl lg:font-semibold text-white"
+          />
+        </div>
+        <div className="box-border caret-transparent min-h-0 min-w-0 md:min-h-[auto] md:min-w-[auto] hidden md:block">
           <div className="box-border caret-transparent flex">
             <a
-              href="/contact"
-              onClick={() => trackQuoteButton('nav')}
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                trackQuoteButton('nav');
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                  const offset = 100;
+                  const elementPosition = contactSection.getBoundingClientRect().top;
+                  const offsetPosition = elementPosition + window.pageYOffset - offset;
+                  window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth",
+                  });
+                }
+              }}
               className="text-white items-center bg-green-800 box-border caret-transparent gap-x-2 flex min-h-0 min-w-0 text-center border px-3 py-1.5 rounded-[100px] border-solid border-transparent md:min-h-[auto] md:min-w-[auto] md:px-5 md:py-2 lg:px-6 lg:py-2 hover:bg-green-900 hover:border-green-800 whitespace-nowrap flex-shrink-0 relative z-10 shadow-[0_0_20px_rgba(22,101,52,0.5),0_0_40px_rgba(22,101,52,0.3)] hover:shadow-[0_0_30px_rgba(20,83,45,0.7),0_0_60px_rgba(20,83,45,0.5)] transition-shadow duration-300"
             >
               <div className="relative box-border caret-transparent min-h-0 min-w-0 overflow-hidden md:min-h-[auto] md:min-w-[auto]">
@@ -50,45 +60,6 @@ export const NavActions = ({ isMobileMenuOpen = false, onToggleMobileMenu }: Nav
           </div>
         </div>
       </div>
-      <button
-        aria-label={isMobileMenuOpen ? "close menu" : "open menu"}
-        onClick={onToggleMobileMenu}
-        className="relative text-white text-2xl box-border caret-transparent block float-right min-h-[44px] min-w-[44px] p-3 cursor-pointer touch-manipulation md:hidden z-[60]"
-      >
-        <div className="text-white box-border caret-transparent w-6 h-6 flex items-center justify-center">
-          {isMobileMenuOpen ? (
-            <svg
-              className="w-full h-full text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              className="w-full h-full text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          )}
-        </div>
-      </button>
     </div>
   );
 };

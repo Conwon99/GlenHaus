@@ -28,21 +28,7 @@ export const ServiceCard = (props: ServiceCardProps) => {
           </p>
         </div>
       </div>
-      <div className="relative bg-[#323232] box-border caret-transparent z-[2] -ml-5 -mb-5 pr-2.5 pt-2.5 rounded-tr-[30px] md:mb-[-30px] md:ml-[-30px]">
-        <img
-          src="https://c.animaapp.com/mial13ktyN5Jkh/assets/67a31be1140edc3afbf591be_e2d97ed2be41fc7b4874e6bea3c7ef44_shape-02.svg"
-          alt=""
-          aria-hidden="true"
-          className="absolute box-border caret-transparent h-5 max-w-full -rotate-90 w-5 left-0 -top-5 md:h-[26px] md:top-[-25px] md:w-[26px] md:-left-px"
-          style={{ filter: 'brightness(0) saturate(100%) invert(20%)' }}
-        />
-        <img
-          src="https://c.animaapp.com/mial13ktyN5Jkh/assets/67a31be1140edc3afbf591be_e2d97ed2be41fc7b4874e6bea3c7ef44_shape-02.svg"
-          alt=""
-          aria-hidden="true"
-          className="absolute box-border caret-transparent h-5 max-w-full -rotate-90 w-5 -right-5 bottom-0 md:h-[26px] md:right-[-25px] md:w-[26px] md:-bottom-px"
-          style={{ filter: 'brightness(0) saturate(100%) invert(20%)' }}
-        />
+      <div className="relative bg-white box-border caret-transparent z-[2] -ml-5 -mb-5 pr-2.5 pt-2.5 rounded-tr-[30px] md:mb-[-30px] md:ml-[-30px]">
         <div className="relative items-center bg-[#787e59] box-border caret-transparent flex h-10 justify-center w-10 rounded-[50%] md:h-[54px] md:w-[54px]">
           <img
             src="https://c.animaapp.com/mial13ktyN5Jkh/assets/670f922e1c7b30c0affab90e_arrow-01.svg"

@@ -1,28 +1,45 @@
+# Robots.txt for Glenhaus Garden Rooms
+# https://glenhausgardenroom.com/robots.txt
+
+# Allow all search engines
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://www.ayrshirefencinggroup.com/sitemap.xml
-
-# Disallow admin and private areas
+# Disallow admin, API, and private areas
 Disallow: /api/
 Disallow: /_astro/
+Disallow: /_next/
+Disallow: /.netlify/
+Disallow: /node_modules/
+Disallow: /*.json$
 
-# Allow all service and location pages
-Allow: /service/
+# Allow important pages
+Allow: /
 Allow: /about
 Allow: /contact
-Allow: /projects/
+Allow: /garden-rooms
+Allow: /decking
+Allow: /projects
 
-# Explicit crawler allowances
+# Sitemap location
+Sitemap: https://glenhausgardenroom.com/sitemap.xml
+
+# Specific crawler instructions
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /imgs/
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 0
 
 User-agent: Slurp
 Allow: /
+Crawl-delay: 1
 
 # Social media crawlers
 User-agent: Twitterbot
@@ -34,6 +51,13 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# Crawl delay (optional - helps with server load)
-Crawl-delay: 1
+User-agent: WhatsApp
+Allow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
 

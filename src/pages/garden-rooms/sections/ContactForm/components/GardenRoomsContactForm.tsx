@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { trackFormStart } from "@/utils/analytics";
+import { trackFormStart, trackFormSubmit } from "@/utils/analytics";
 
 export const GardenRoomsContactForm = () => {
   useEffect(() => {
@@ -13,7 +13,19 @@ export const GardenRoomsContactForm = () => {
       const handleFormStart = () => {
         if (!formStarted) {
           formStarted = true;
-          trackFormStart('contact');
+          // Determine if it's contact page or service page
+          if (typeof window !== "undefined") {
+            const pathname = window.location.pathname;
+            if (pathname === "/contact") {
+              trackFormStart('contact');
+            } else if (pathname.includes("garden-rooms") || pathname.includes("decking")) {
+              trackFormStart('service');
+            } else {
+              trackFormStart('contact');
+            }
+          } else {
+            trackFormStart('contact');
+          }
         }
       };
 
@@ -42,30 +54,41 @@ export const GardenRoomsContactForm = () => {
           const hostname = window.location.hostname;
           const pathname = window.location.pathname;
           
-          // Check if it's a subdomain (e.g., ads.glenhausgardenrooms.com)
-          const isSubdomain = hostname !== "glenhausgardenrooms.com" && 
-                             hostname !== "www.glenhausgardenrooms.com" &&
-                             hostname.includes("glenhausgardenrooms.com");
+          // Check if it's a subdomain (e.g., ads.glenhausgardenroom.com)
+          const isSubdomain = hostname !== "glenhausgardenroom.com" && 
+                             hostname !== "www.glenhausgardenroom.com" &&
+                             hostname.includes("glenhausgardenroom.com");
           
           // Check if it's the garden-rooms page (subdomain landing page)
           const isGardenRoomsPage = pathname === "/garden-rooms" || pathname === "/garden-rooms.html";
+          const isContactPage = pathname === "/contact";
           
           let websiteUrl: string;
-          if (isSubdomain || isGardenRoomsPage) {
-            // Use the actual current URL for subdomain or garden-rooms page
+          if (isSubdomain || isGardenRoomsPage || isContactPage) {
+            // Use the actual current URL for subdomain, garden-rooms page, or contact page
             websiteUrl = window.location.origin + pathname;
           } else {
             // Main domain
-            websiteUrl = "https://glenhausgardenrooms.com/";
+            websiteUrl = "https://glenhausgardenroom.com/";
           }
           
           formData.append("websiteUrl", websiteUrl);
         } else {
           // Fallback for SSR
-          formData.append("websiteUrl", "https://glenhausgardenrooms.com/");
+          formData.append("websiteUrl", "https://glenhausgardenroom.com/");
         }
         
-        formData.append("service", "Garden Rooms");
+        // Determine service based on page
+        let service = "General Inquiry";
+        if (typeof window !== "undefined") {
+          const currentPathname = window.location.pathname;
+          if (currentPathname.includes("garden-rooms")) {
+            service = "Garden Rooms";
+          } else if (currentPathname.includes("decking")) {
+            service = "Decking";
+          }
+        }
+        formData.append("service", service);
 
         try {
           const response = await fetch("https://formspree.io/f/xjgvojeo", {
@@ -77,6 +100,8 @@ export const GardenRoomsContactForm = () => {
           });
 
           if (response.ok) {
+            // Track successful form submission
+            trackFormSubmit('garden-rooms');
             form.reset();
             if (successMessage) {
               successMessage.classList.remove("hidden");
@@ -113,7 +138,7 @@ export const GardenRoomsContactForm = () => {
           placeholder="Dennis Barrett"
           type="text"
           required
-          className="text-white text-base bg-gray-900 box-border caret-transparent block h-12 leading-[25.6px] align-middle w-full border-2 border-gray-700 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+          className="text-gray-900 text-base bg-white box-border caret-transparent block h-12 leading-[25.6px] align-middle w-full border-2 border-gray-300 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
         />
       </div>
       <div className="text-base items-start box-border caret-transparent flex-col w-full mb-5 md:text-lg md:items-center md:flex-row">
@@ -125,7 +150,7 @@ export const GardenRoomsContactForm = () => {
           placeholder="your.email@example.com"
           type="email"
           required
-          className="text-white text-base bg-gray-900 box-border caret-transparent block h-12 leading-[25.6px] align-middle w-full border-2 border-gray-700 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+          className="text-gray-900 text-base bg-white box-border caret-transparent block h-12 leading-[25.6px] align-middle w-full border-2 border-gray-300 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
         />
       </div>
       <div className="text-base items-start box-border caret-transparent flex-col w-full mb-5 md:text-lg md:items-center md:flex-row">
@@ -134,10 +159,10 @@ export const GardenRoomsContactForm = () => {
         </label>
         <input
           name="phone"
-          placeholder="07926 592704"
+          placeholder="07375 872331"
           type="tel"
           required
-          className="text-white text-base bg-gray-900 box-border caret-transparent block h-12 leading-[25.6px] align-middle w-full border-2 border-gray-700 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+          className="text-gray-900 text-base bg-white box-border caret-transparent block h-12 leading-[25.6px] align-middle w-full border-2 border-gray-300 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
         />
       </div>
       <div className="text-base items-start box-border caret-transparent flex-col w-full mb-5 md:text-lg md:items-center md:flex-row">
@@ -149,7 +174,7 @@ export const GardenRoomsContactForm = () => {
           placeholder="Tell us about your garden room needs..."
           rows={6}
           required
-          className="text-white text-base bg-gray-900 box-border caret-transparent block leading-[25.6px] align-middle w-full border-2 border-gray-700 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid resize-vertical focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+          className="text-gray-900 text-base bg-white box-border caret-transparent block leading-[25.6px] align-middle w-full border-2 border-gray-300 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid resize-vertical focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
         />
       </div>
       <div className="text-base items-start box-border caret-transparent flex-col w-full mb-5 md:text-lg md:items-center md:flex-row">
@@ -161,9 +186,9 @@ export const GardenRoomsContactForm = () => {
           type="file"
           accept="image/*"
           multiple
-          className="text-white text-base bg-gray-900 box-border caret-transparent block w-full border-2 border-gray-700 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-800 file:text-white hover:file:bg-green-900 file:cursor-pointer"
+          className="text-gray-900 text-base bg-white box-border caret-transparent block w-full border-2 border-gray-300 mb-2.5 px-5 py-2.5 rounded-[20px] border-solid focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-800 file:text-white hover:file:bg-green-900 file:cursor-pointer"
         />
-        <p className="text-gray-400 text-sm mt-1">You can upload multiple images to help us understand your project better.</p>
+        <p className="text-gray-300 text-sm mt-1">You can upload multiple images to help us understand your project better.</p>
       </div>
       <input
         type="submit"

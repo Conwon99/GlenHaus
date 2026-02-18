@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Header } from "@/sections/Header";
+import { Footer } from "@/sections/Footer";
 import { GardenRoomsHero } from "@/pages/garden-rooms/sections/Hero";
 import { GardenRoomsFeatures } from "@/pages/garden-rooms/sections/Features";
 import { GardenRoomsGallery } from "@/pages/garden-rooms/sections/Gallery";
@@ -9,18 +11,23 @@ import { GardenRoomsContactForm } from "@/pages/garden-rooms/sections/ContactFor
 ---
 
 <BaseLayout 
-  title="Garden Rooms Scotland | Custom Garden Room Installation | Glenhaus Garden Rooms"
-  description="Transform your garden with a beautiful custom garden room. Professional installation across Scotland. Free quotes, fully insured, 13+ years experience. Book your garden room today!"
-  canonical="https://www.glenhausgardenrooms.com/garden-rooms"
-  keywords="garden rooms scotland, garden room installation, custom garden rooms, garden office scotland, garden room builders, outdoor rooms scotland"
+  title="Garden Rooms Central Belt | Custom Garden Room Installation | Glenhaus Garden Rooms"
+  description="Transform your garden with a beautiful custom garden room. Professional installation across the Scotland Central Belt - Glasgow, Edinburgh, and Ayrshire. Free quotes, fully insured, 13+ years experience."
+  canonical="https://glenhausgardenroom.com/garden-rooms"
+  keywords="garden rooms central belt, garden room installation glasgow, garden rooms edinburgh, garden rooms ayrshire, custom garden rooms, garden office scotland, garden room builders"
+  gaId="G-T9RTPLDCJ7"
 >
     <div class="text-neutral-600 text-lg not-italic normal-nums font-medium accent-auto bg-[#323232] box-border caret-transparent block tracking-[normal] leading-[27px] list-outside list-disc min-h-full pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-manrope">
-      <GardenRoomsHero client:load />
+      <Header client:load />
+      <div class="pt-[80px] md:pt-[100px]">
+        <GardenRoomsHero client:load />
+      </div>
       <GardenRoomsFeatures client:load />
       <GardenRoomsGallery client:load />
       <GardenRoomsTestimonials client:load />
       <GardenRoomsFAQ client:load />
       <GardenRoomsContactForm client:load />
+      <Footer client:load />
     </div>
 </BaseLayout>
 

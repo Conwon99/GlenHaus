@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { trackQuoteButton } from "@/utils/analytics";
 
-export const GardenRoomsGallery = () => {
+interface GardenRoomsGalleryProps {
+  location?: { name: string; regionLabel?: string };
+}
+
+export const GardenRoomsGallery = ({ location }: GardenRoomsGalleryProps) => {
   const images = [
     "/imgs/WhatsApp Image 2025-12-27 at 4.01.37 PM (1).jpeg",
     "/imgs/WhatsApp Image 2025-12-27 at 4.01.37 PM (2).jpeg",
@@ -15,14 +20,14 @@ export const GardenRoomsGallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <section className="bg-gray-100 box-border caret-transparent py-16 md:py-24">
+    <section id="gallery" className="bg-gray-100 box-border caret-transparent py-16 md:py-24">
       <div className="box-border caret-transparent max-w-[1204px] mx-auto px-4 sm:px-5 md:px-8">
         <div className="box-border caret-transparent text-center mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 box-border caret-transparent mb-4">
-            Our Garden Room Projects
+            Our Garden Room Projects{location ? ` in ${location.name}` : ""}
           </h2>
           <p className="text-lg md:text-xl text-gray-600 box-border caret-transparent max-w-3xl mx-auto">
-            Take a look at some of our recent garden room installations across Scotland
+            {location ? `Take a look at some of our recent garden room installations in ${location.name} and across Scotland` : "Take a look at some of our recent garden room installations across Scotland"}
           </p>
         </div>
         
@@ -36,7 +41,8 @@ export const GardenRoomsGallery = () => {
               <div className="box-border caret-transparent aspect-[4/3] overflow-hidden">
                 <img
                   src={image}
-                  alt={`Garden room project ${index + 1}`}
+                  alt={`Garden room installation project ${index + 1}${location ? ` in ${location.name}` : " in Scotland"} - Custom garden room by Glenhaus Garden Rooms`}
+                  loading="lazy"
                   className="w-full h-full object-cover box-border caret-transparent group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
@@ -53,6 +59,7 @@ export const GardenRoomsGallery = () => {
         <div className="box-border caret-transparent text-center mt-12 md:mt-16">
           <a
             href="#contact"
+            onClick={() => trackQuoteButton('gallery')}
             className="inline-block bg-green-800 hover:bg-green-900 text-white font-semibold py-4 px-8 rounded-lg text-lg box-border caret-transparent transition-colors duration-300 shadow-lg hover:shadow-xl"
           >
             Get a Free Quote
@@ -78,7 +85,7 @@ export const GardenRoomsGallery = () => {
             </button>
             <img
               src={selectedImage}
-              alt="Garden room project"
+              alt={`Garden room installation project${location ? ` in ${location.name}` : " in Scotland"} - Custom garden room by Glenhaus Garden Rooms`}
               className="max-w-full max-h-[90vh] object-contain box-border caret-transparent rounded-lg"
             />
           </div>

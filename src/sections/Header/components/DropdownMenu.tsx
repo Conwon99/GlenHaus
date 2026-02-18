@@ -29,11 +29,6 @@ export const DropdownMenu = () => {
           >
             Projects
           </a>
-          <a href="/services"
-            className="relative box-border caret-transparent block text-nowrap align-top w-full mb-2.5 mx-auto hover:text-gray-900 hover:decoration-transparent hover:border-gray-900"
-          >
-            Services
-          </a>
           <a href="/contact"
             className="relative box-border caret-transparent block text-nowrap align-top w-full mb-2.5 mx-auto hover:text-gray-900 hover:decoration-transparent hover:border-gray-900"
           >

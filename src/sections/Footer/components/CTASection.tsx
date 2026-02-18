@@ -20,6 +20,7 @@ export const CTASection = () => {
             </a>
             <PhoneLink
               variant="default"
+              trackingLocation="services"
               iconSrc="https://c.animaapp.com/mhooxuovKXaEfR/assets/670f86de88858acaf330ddd9_phone.svg"
               iconAlt="Phone"
               className="text-white text-lg font-semibold bg-[#787e59] box-border caret-transparent inline-flex items-center justify-center gap-x-3 text-center border border-[#787e59] px-8 py-4 rounded-[50px] border-solid md:text-xl md:leading-[28px] md:px-12 md:py-6 hover:bg-[#8a9168] hover:decoration-transparent shadow-[0_0_20px_rgba(120,126,89,0.5),0_0_40px_rgba(120,126,89,0.3)] hover:shadow-[0_0_30px_rgba(120,126,89,0.7),0_0_60px_rgba(120,126,89,0.5)] transition-shadow duration-300 min-h-[64px] md:min-h-[80px] w-full"
